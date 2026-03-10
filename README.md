@@ -19,8 +19,31 @@ O projeto foi construído utilizando um monorepo, separando claramente as respon
 
 ## Configuração do Banco de Dados
 
-1. Execute o script contido na raiz do projeto (ou cole a query de criação fornecida) para criar o banco `agendamentos_db` e as tabelas necessárias.
-2. O script já insere um veículo de teste no banco.
+1. Acesse o seu gerenciador MySQL (ex: MySQL Workbench).
+2. Execute o script contido em `database/schema.sql` para criar o banco `agendamentos_db`, as tabelas necessárias e inserir o veículo de teste inicial.
+
+## Documentação da API (Endpoints)
+
+A API roda por padrão na porta 8000. 
+
+### `GET /api/veiculo/{id}`
+Retorna os dados estáticos de um veículo específico.
+
+### `GET /api/disponibilidade?data=YYYY-MM-DD`
+Retorna os horários disponíveis para agendamento em uma data específica, subtraindo os horários já agendados no banco de dados.
+
+### `POST /api/agendamentos`
+Recebe os dados do usuário e do agendamento, validando duplicidade.
+**Payload esperado (JSON):**
+```json
+{
+  "veiculo_id": 1,
+  "nome": "Nome do Cliente",
+  "email": "cliente@email.com",
+  "telefone": "11999999999",
+  "data_hora": "2026-03-22 10:00:00"
+}
+```
 
 ## Rodando o Backend
 
