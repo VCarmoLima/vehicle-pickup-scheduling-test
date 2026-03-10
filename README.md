@@ -1,6 +1,6 @@
 # Agendamento de Veículos
 
-API RESTful em PHP e aplicação Frontend em React para agendamento de visitas a veículos.
+API RESTful em PHP e aplicação Frontend em React para agendamento de retirada de veículos.
 
 ## Arquitetura
 
