@@ -36,5 +36,6 @@ $router->set404(function () {
 });
 
 $router->get('/api/veiculo/(\d+)', '\App\Controllers\VeiculoController@show');
+$router->get('/api/disponibilidade', '\App\Controllers\AgendamentoController@disponibilidade');
 
 $router->run();
