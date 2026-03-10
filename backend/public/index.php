@@ -35,4 +35,6 @@ $router->set404(function () {
     echo json_encode(["error" => "Rota nao encontrada"]);
 });
 
+$router->get('/api/veiculo/(\d+)', '\App\Controllers\VeiculoController@show');
+
 $router->run();
