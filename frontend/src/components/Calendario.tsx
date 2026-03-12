@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Box, Typography, TextField, Button } from '@mui/material';
 import { Grid } from '@mui/material';
 
@@ -6,6 +7,7 @@ interface Props {
 }
 
 export default function Calendario({ onNext }: Props) {
+    const [horaSelecionada, setHoraSelecionada] = useState<string | null>(null);
     const mockHorarios = ['09:00', '10:00', '11:00', '14:00', '15:00'];
 
     return (
@@ -34,9 +36,11 @@ export default function Calendario({ onNext }: Props) {
                 {mockHorarios.map((hora) => (
                     <Grid size={{ xs: 4, sm: 3 }} key={hora}>
                         <Button
-                            variant="outlined"
+                            variant={horaSelecionada === hora ? 'contained' : 'outlined'}
+                            color={horaSelecionada === hora ? 'primary' : 'secondary'}
                             fullWidth
                             sx={{ py: 1.5 }}
+                            onClick={() => setHoraSelecionada(hora)}
                         >
                             {hora}
                         </Button>
@@ -50,6 +54,7 @@ export default function Calendario({ onNext }: Props) {
                     color="primary"
                     size="large"
                     onClick={onNext}
+                    disabled={!horaSelecionada}
                 >
                     Avançar para Dados
                 </Button>
