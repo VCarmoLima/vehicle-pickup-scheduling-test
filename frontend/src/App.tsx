@@ -35,8 +35,7 @@ export default function App() {
             </Grid>
 
             <Grid size={{ xs: 12, md: 7, lg: 8 }}>
-              <Paper elevation={0} sx={{ p: 4, border: '1px solid #e0e0e0', borderRadius: 2, minHeight: '400px' }}>
-
+              <Paper elevation={0} sx={{ p: 4, border: '1px solid #e0e0e0', borderRadius: 2, height: '100%', display: 'flex', flexDirection: 'column', transition: 'all 0.3s ease-in-out' }}>
                 {step === 1 && (
                   <Calendario onNext={() => setStep(2)} />
                 )}

@@ -8,7 +8,7 @@ interface Props {
 
 export default function VehicleSummary({ veiculo }: Props) {
     return (
-        <Card elevation={0} sx={{ border: '1px solid #e0e0e0', borderRadius: 2 }}>
+        <Card elevation={0} sx={{ border: '1px solid #e0e0e0', borderRadius: 2, height: '100%', display: 'flex', flexDirection: 'column', transition: 'all 0.3s ease-in-out' }}>
             <CardMedia
                 component="img"
                 height="220"
@@ -26,13 +26,16 @@ export default function VehicleSummary({ veiculo }: Props) {
 
                 <Divider sx={{ my: 2 }} />
 
-                <Typography variant="h6" color="primary.main" fontWeight="bold" gutterBottom>
-                    R$ {Number(veiculo.preco).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                </Typography>
+                <Box mt="auto">
 
-                <Box display="flex" alignItems="center" color="text.secondary" mt={2}>
-                    <LocationOnIcon fontSize="small" sx={{ mr: 0.5 }} />
-                    <Typography variant="body2">{veiculo.localizacao}</Typography>
+                    <Typography variant="h6" color="primary.main" fontWeight="bold" gutterBottom>
+                        R$ {Number(veiculo.preco).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                    </Typography>
+
+                    <Box display="flex" alignItems="center" color="text.secondary" mt={2}>
+                        <LocationOnIcon fontSize="small" sx={{ mr: 0.5 }} />
+                        <Typography variant="body2">{veiculo.localizacao}</Typography>
+                    </Box>
                 </Box>
             </CardContent>
         </Card>
