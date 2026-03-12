@@ -10,6 +10,13 @@ O projeto foi construído utilizando um monorepo, separando claramente as respon
 - **Frontend:** React + TypeScript + Vite. Gerenciamento de estado assíncrono com React Query e construção de interface padronizada com Material UI (MUI).
 - **Banco de Dados:** MySQL com restrições de unicidade a nível de banco para garantir a consistência das regras de negócio (prevenção de double-booking).
 
+## Funcionalidades e UX (Frontend)
+
+- **Mobile First:** Interface 100% responsiva baseada em CSS Flexbox e Grid do Material UI.
+- **Wizard Interativo (SPA):** Navegação fluida em três etapas (Calendário -> Formulário -> Sucesso) sem recarregar a página.
+- **Defesa em Profundidade (Validação):** Validação de E-mail via Regex e máscara de Telefone dinâmica (fixo/celular) em tempo real.
+- **Regras de Negócio na UI:** Bloqueio de datas retroativas, finais de semana e limite de agendamento de 30 dias diretamente no calendário visual.
+
 ## Pré-requisitos
 
 - PHP 8.1+
@@ -56,5 +63,7 @@ Recebe os dados do usuário e do agendamento, validando duplicidade.
 ## Rodando o Frontend
 
 1. Acesse a pasta `/frontend`.
-2. Rode `npm install` ou `yarn install`.
-3. Rode `npm run dev` ou `yarn dev` para iniciar o servidor de desenvolvimento.
+2. Crie um arquivo `.env` na raiz do frontend com a URL da API:
+   `VITE_API_URL=http://localhost:8000/api`
+3. Rode `npm install` (ou `yarn install`).
+4. Rode `npm run dev` (ou `yarn dev`) para iniciar o servidor de desenvolvimento.
