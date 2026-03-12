@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { CssBaseline, Container, Grid, Paper, Typography, Box } from '@mui/material';
 import VeiculoSummary from './components/VeiculoSummary';
 import Calendario from './components/Calendario';
+import Formulario from './components/Formulario';
 import type { Veiculo } from './types';
 
 // Dados temporários apenas para desenhar a tela
@@ -38,9 +39,17 @@ export default function App() {
                 {step === 1 && (
                   <Calendario onNext={() => setStep(2)} />
                 )}
-
                 {step === 2 && (
-                  <Typography>Formulário!</Typography>
+                  <Formulario
+                    onNext={() => setStep(3)}
+                    onBack={() => setStep(1)}
+                  />
+                )}
+
+                {step === 3 && (
+                  <Typography variant="h5" color="success.main" textAlign="center" mt={4}>
+                    Sucesso!
+                  </Typography>
                 )}
 
               </Paper>
