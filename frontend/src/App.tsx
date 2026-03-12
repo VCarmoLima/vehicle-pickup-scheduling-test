@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { CssBaseline, Container, Grid, Paper, Typography, Box } from '@mui/material';
-import VehicleSummary from './components/VehicleSummary';
-import type { Vehicle } from './types';
+import VeiculoSummary from './components/VeiculoSummary';
+import Calendario from './components/Calendario';
+import type { Veiculo } from './types';
 
 // Dados temporários apenas para desenhar a tela
-const mockVehicle: Vehicle = {
+const mockVeiculo: Veiculo = {
   id: 1,
   modelo: 'Fiat Argo',
   versao: 'REX FULL 8V ELÉTRICO 4P AUTOMÁTICO',
@@ -13,6 +15,8 @@ const mockVehicle: Vehicle = {
 };
 
 export default function App() {
+  const [step, setStep] = useState(1);
+
   return (
     <>
       <CssBaseline />
@@ -25,17 +29,20 @@ export default function App() {
 
           <Grid container spacing={4}>
             <Grid size={{ xs: 12, md: 5, lg: 4 }}>
-              <VehicleSummary vehicle={mockVehicle} />
+              <VeiculoSummary veiculo={mockVeiculo} />
             </Grid>
 
             <Grid size={{ xs: 12, md: 7, lg: 8 }}>
               <Paper elevation={0} sx={{ p: 4, border: '1px solid #e0e0e0', borderRadius: 2, minHeight: '400px' }}>
-                <Typography variant="h6" color="secondary.main" gutterBottom>
-                  Área de Ações
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  (Aqui construiremos o calendário de {mockVehicle.modelo} e o formulário na próxima etapa!)
-                </Typography>
+
+                {step === 1 && (
+                  <Calendario onNext={() => setStep(2)} />
+                )}
+
+                {step === 2 && (
+                  <Typography>Formulário!</Typography>
+                )}
+
               </Paper>
             </Grid>
           </Grid>
