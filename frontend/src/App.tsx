@@ -3,6 +3,7 @@ import { CssBaseline, Container, Grid, Paper, Typography, Box } from '@mui/mater
 import VeiculoSummary from './components/VeiculoSummary';
 import Calendario from './components/Calendario';
 import Formulario from './components/Formulario';
+import Sucesso from './components/Sucesso';
 import type { Veiculo } from './types';
 
 // Dados temporários apenas para desenhar a tela
@@ -47,9 +48,7 @@ export default function App() {
                 )}
 
                 {step === 3 && (
-                  <Typography variant="h5" color="success.main" textAlign="center" mt={4}>
-                    Sucesso!
-                  </Typography>
+                  <Sucesso onReset={() => setStep(1)} />
                 )}
 
               </Paper>
