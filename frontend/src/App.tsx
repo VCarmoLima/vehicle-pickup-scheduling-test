@@ -10,7 +10,7 @@ import type { Veiculo } from './types';
 
 export default function App() {
   const [step, setStep] = useState(1);
-  const [, setAgendamento] = useState({ data: '', hora: '' });
+  const [agendamento, setAgendamento] = useState({ data: '', hora: '' });
 
   const { data: veiculo, isLoading, isError } = useQuery<Veiculo>({
     queryKey: ['veiculo', 1],
@@ -63,6 +63,8 @@ export default function App() {
                 )}
                 {step === 2 && (
                   <Formulario
+                    veiculoId={veiculo.id}
+                    agendamento={agendamento}
                     onNext={() => setStep(3)}
                     onBack={() => setStep(1)}
                   />
