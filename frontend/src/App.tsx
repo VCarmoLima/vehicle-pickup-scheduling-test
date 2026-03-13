@@ -1,7 +1,10 @@
 import { useState } from 'react';
-import { CssBaseline, Container, Grid, Paper, Typography, Box, CircularProgress, Alert } from '@mui/material';
+import { CssBaseline, Container, Paper, Typography, Box, CircularProgress, Alert, Button } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useQuery } from '@tanstack/react-query';
 import { api } from './services/api';
+import Menu from './components/Menu';
 import VeiculoSummary from './components/VeiculoSummary';
 import Calendario from './components/Calendario';
 import Formulario from './components/Formulario';
@@ -20,9 +23,15 @@ export default function App() {
     },
   });
 
+  const getWizardTitle = () => {
+    if (step === 1) return "Agende o dia e horário da sua visita";
+    if (step === 2) return "Concluir Agendamento";
+    return "";
+  };
+
   if (isLoading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bgcolor="background.default">
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bgcolor="#fafafa">
         <CircularProgress color="primary" />
       </Box>
     );
@@ -30,8 +39,8 @@ export default function App() {
 
   if (isError || !veiculo) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bgcolor="background.default" p={2}>
-        <Alert severity="error">Erro ao carregar os dados do veículo. Verifique se o backend está rodando!</Alert>
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bgcolor="#fafafa" p={2}>
+        <Alert severity="error">Erro ao carregar os dados do veículo.</Alert>
       </Box>
     );
   }
@@ -39,45 +48,98 @@ export default function App() {
   return (
     <>
       <CssBaseline />
-      <Box sx={{ bgcolor: 'background.default', minHeight: '100vh', py: 6 }}>
+
+      <Menu />
+
+      <Box sx={{ bgcolor: '#fafafa', minHeight: 'calc(100vh - 80px)', py: 4 }}>
         <Container maxWidth="lg">
 
-          <Typography variant="h4" component="h1" color="secondary.main" fontWeight="bold" mb={4}>
-            Agendamento de Retirada
-          </Typography>
+          {step < 3 && (
+            <Button
+              startIcon={<ArrowBackIosNewIcon sx={{ fontSize: '14px !important' }} />}
+              sx={{ color: '#2c2c2c', textTransform: 'none', mb: 3, fontWeight: 600, fontSize: '16px' }}
+              onClick={() => {
+                if (step === 2) {
+                  setStep(1)
+                }
+              }}
+            >
+              Voltar
+            </Button>
+          )}
 
           <Grid container spacing={4}>
-            <Grid size={{ xs: 12, md: 5, lg: 4 }}>
-              <VeiculoSummary veiculo={veiculo} />
-            </Grid>
+            {step < 3 && (
+              <Grid size={{ xs: 12, md: 5, lg: 4 }}>
+                <VeiculoSummary veiculo={veiculo} />
+              </Grid>
+            )}
 
-            <Grid size={{ xs: 12, md: 7, lg: 8 }}>
-              <Paper elevation={0} sx={{ p: 4, border: '1px solid #e0e0e0', borderRadius: 2, height: '100%', display: 'flex', flexDirection: 'column', transition: 'all 0.3s ease-in-out' }}>
-                {step === 1 && (
-                  <Calendario
-                    onNext={(data, hora) => {
-                      setAgendamento({ data, hora });
-                      setStep(2);
-                    }}
-                  />
-                )}
-                {step === 2 && (
-                  <Formulario
-                    veiculoId={veiculo.id}
+            <Grid size={{ xs: 12, md: step === 3 ? 12 : 7, lg: step === 3 ? 12 : 8 }}>
+
+              {step < 3 ? (
+                <Paper
+                  elevation={0}
+                  sx={{
+                    border: '1px solid #eaeaea',
+                    borderRadius: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    overflow: 'hidden',
+                    height: '100%',
+                    transition: 'all 0.3s ease-in-out'
+                  }}
+                >
+                  <Box sx={{ bgcolor: '#2c3038', color: 'white', py: 2.5, textAlign: 'center' }}>
+                    <Typography variant="subtitle1" fontWeight="500">
+                      {getWizardTitle()}
+                    </Typography>
+                  </Box>
+
+                  <Box sx={{ p: 4, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                    {step === 1 && (
+                      <Calendario
+                        onNext={(data, hora) => {
+                          setAgendamento({ data, hora });
+                          setStep(2);
+                        }}
+                      />
+                    )}
+
+                    {step === 2 && (
+                      <Formulario
+                        veiculoId={veiculo.id}
+                        agendamento={agendamento}
+                        onNext={() => setStep(3)}
+                        onBack={() => setStep(1)}
+                      />
+                    )}
+                  </Box>
+                </Paper>
+              ) : (
+                <Paper
+                  elevation={0}
+                  sx={{
+                    border: '1px solid #eaeaea',
+                    borderRadius: 2,
+                    bgcolor: '#ffffffff',
+                    p: { xs: 4, md: 8 },
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    minHeight: '400px'
+                  }}
+                >
+                  <Sucesso
+                    onReset={() => setStep(1)}
                     agendamento={agendamento}
-                    onNext={() => setStep(3)}
-                    onBack={() => setStep(1)}
+                    localizacao={veiculo.localizacao}
                   />
-                )}
-
-                {step === 3 && (
-                  <Sucesso onReset={() => setStep(1)} />
-                )}
-
-              </Paper>
+                </Paper>
+              )}
             </Grid>
           </Grid>
-
         </Container>
       </Box>
     </>

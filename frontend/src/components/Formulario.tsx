@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Box, Typography, TextField, Button, Alert, CircularProgress } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { useMutation } from '@tanstack/react-query';
+import dayjs from 'dayjs';
 import { api } from '../services/api';
 
 interface Props {
@@ -11,7 +12,7 @@ interface Props {
     onBack: () => void;
 }
 
-export default function Formulario({ veiculoId, agendamento, onNext, onBack }: Props) {
+export default function Formulario({ veiculoId, agendamento, onNext }: Props) {
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [telefone, setTelefone] = useState('');
@@ -83,84 +84,58 @@ export default function Formulario({ veiculoId, agendamento, onNext, onBack }: P
     };
 
     return (
-        <Box height="100%" display="flex" flexDirection="column">
-            <Box flexGrow={1}>
-                <Typography variant="h6" color="secondary.main" gutterBottom>
-                    2. Seus Dados
-                </Typography>
-                <Typography variant="body2" color="text.secondary" mb={4}>
-                    Preencha os dados abaixo para confirmar a retirada do veículo.
+        <Box height="100%" display="flex" flexDirection="column" alignItems="center">
+            <Box width="100%" flexGrow={1} display="flex" flexDirection="column" alignItems="center">
+
+                <Box width="100%" textAlign="left" mb={4}>
+                    <Typography variant="h6" color="#2c2c2c" fontWeight="bold" gutterBottom>
+                        2. Seus Dados
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        Preencha os dados abaixo para confirmar a retirada do veículo na data e hora selecionada:
+                    </Typography>
+                </Box>
+
+                <Typography variant="subtitle1" color="#2c2c2c" fontWeight="bold" sx={{ textTransform: 'capitalize', mb: 4 }}>
+                    {dayjs(agendamento.data).format('dddd, DD/MM/YYYY')}, às {agendamento.hora}
                 </Typography>
 
                 {mutation.isError && (
-                    <Alert severity="error" sx={{ mb: 3 }}>
-                        Ops! Ocorreu um erro ao agendar. Tente novamente ou escolha outro horário.
+                    <Alert severity="error" sx={{ mb: 3, width: '100%' }}>
+                        Ops! Ocorreu um erro ao agendar. Tente novamente.
                     </Alert>
                 )}
 
-                <Grid container spacing={3} mb={4}>
+                <Grid container spacing={3} mb={4} sx={{ width: '100%' }}>
                     <Grid size={{ xs: 12 }}>
-                        <TextField
-                            label="Nome Completo"
-                            variant="outlined"
-                            fullWidth
-                            value={nome}
-                            onChange={(e) => setNome(e.target.value)}
-                            disabled={mutation.isPending}
-                            required
-                        />
-                    </Grid>
-
-                    <Grid size={{ xs: 12, sm: 6 }}>
-                        <TextField
-                            label="E-mail"
-                            type="email"
-                            variant="outlined"
-                            fullWidth
-                            value={email}
-                            onChange={handleEmailChange}
-                            error={!!erros.email}
-                            helperText={erros.email}
-                            disabled={mutation.isPending}
-                            required
-                        />
+                        <TextField label="Nome" variant="outlined" fullWidth value={nome} onChange={(e) => setNome(e.target.value)} disabled={mutation.isPending} />
                     </Grid>
                     <Grid size={{ xs: 12, sm: 6 }}>
-                        <TextField
-                            label="Telefone"
-                            type="tel"
-                            variant="outlined"
-                            fullWidth
-                            value={telefone}
-                            onChange={handleTelefoneChange}
-                            error={!!erros.telefone}
-                            helperText={erros.telefone}
-                            placeholder="(11) 99999-9999"
-                            disabled={mutation.isPending}
-                            required
-                        />
+                        <TextField label="E-mail" type="email" variant="outlined" fullWidth value={email} onChange={handleEmailChange} error={!!erros.email} helperText={erros.email} disabled={mutation.isPending} />
+                    </Grid>
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                        <TextField label="Telefone" type="tel" variant="outlined" fullWidth value={telefone} onChange={handleTelefoneChange} error={!!erros.telefone} helperText={erros.telefone} placeholder="(11) 99999-9999" disabled={mutation.isPending} />
                     </Grid>
                 </Grid>
             </Box>
 
-            <Box display="flex" justifyContent="space-between" mt="auto">
-                <Button
-                    variant="outlined"
-                    color="secondary"
-                    size="large"
-                    onClick={onBack}
-                    disabled={mutation.isPending}
-                >
-                    Voltar
-                </Button>
+            <Box display="flex" justifyContent="center" mt="auto" width="100%">
                 <Button
                     variant="contained"
-                    color="primary"
-                    size="large"
                     onClick={validarEAvancar}
                     disabled={!nome.trim() || !email.trim() || !telefone.trim() || mutation.isPending}
+                    sx={{
+                        bgcolor: '#ff274b',
+                        '&:hover': { bgcolor: '#e01e3c' },
+                        textTransform: 'none',
+                        fontSize: '16px',
+                        fontWeight: 'bold',
+                        px: 8,
+                        py: 1.5,
+                        borderRadius: 2
+                    }}
                 >
-                    {mutation.isPending ? <CircularProgress size={24} color="inherit" /> : 'Confirmar Agendamento'}
+                    {mutation.isPending ? <CircularProgress size={24} color="inherit" /> : 'Concluir'}
                 </Button>
             </Box>
         </Box>
