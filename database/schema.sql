@@ -28,4 +28,4 @@ CREATE TABLE agendamentos (
 );
 
 INSERT INTO veiculos (modelo, versao, preco, imagem_url, localizacao)
-VALUES ('Fiat Argo', 'REX FULL 8V ELÉTRICO 4P AUTOMÁTICO', 13700.00, 'http://localhost:8000/images/argo.jpg', 'Mogi das Cruzes - SP');
+VALUES ('Fiat Argo', '1.0 2021/2022', 13700.00, 'http://localhost:8000/images/argo.jpg', 'Mogi das Cruzes - SP');
