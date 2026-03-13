@@ -1,23 +1,39 @@
 import { useState } from 'react';
-import { CssBaseline, Container, Grid, Paper, Typography, Box } from '@mui/material';
+import { CssBaseline, Container, Grid, Paper, Typography, Box, CircularProgress, Alert } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
+import { api } from './services/api';
 import VeiculoSummary from './components/VeiculoSummary';
 import Calendario from './components/Calendario';
 import Formulario from './components/Formulario';
 import Sucesso from './components/Sucesso';
 import type { Veiculo } from './types';
 
-// Dados temporários apenas para desenhar a tela
-const mockVeiculo: Veiculo = {
-  id: 1,
-  modelo: 'Fiat Argo',
-  versao: 'REX FULL 8V ELÉTRICO 4P AUTOMÁTICO',
-  preco: '13700.00',
-  imagem_url: 'https://placehold.co/600x400/eeeeee/31343c/png?text=Fiat+Argo',
-  localizacao: 'Mogi das Cruzes - SP'
-};
-
 export default function App() {
   const [step, setStep] = useState(1);
+
+  const { data: veiculo, isLoading, isError } = useQuery<Veiculo>({
+    queryKey: ['veiculo', 1],
+    queryFn: async () => {
+      const response = await api.get('/veiculo/1');
+      return response.data;
+    },
+  });
+
+  if (isLoading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bgcolor="background.default">
+        <CircularProgress color="primary" />
+      </Box>
+    );
+  }
+
+  if (isError || !veiculo) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bgcolor="background.default" p={2}>
+        <Alert severity="error">Erro ao carregar os dados do veículo. Verifique se o backend está rodando!</Alert>
+      </Box>
+    );
+  }
 
   return (
     <>
@@ -31,7 +47,7 @@ export default function App() {
 
           <Grid container spacing={4}>
             <Grid size={{ xs: 12, md: 5, lg: 4 }}>
-              <VeiculoSummary veiculo={mockVeiculo} />
+              <VeiculoSummary veiculo={veiculo} />
             </Grid>
 
             <Grid size={{ xs: 12, md: 7, lg: 8 }}>
