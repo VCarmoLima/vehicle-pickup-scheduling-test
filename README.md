@@ -19,12 +19,20 @@ O projeto foi construído utilizando um monorepo, separando claramente as respon
 - **Calendário Horizontal Customizado:** Paginação fluida de dias úteis com navegação por setas, garantindo uma experiência otimizada sem o uso de "pop-ups" nativos.
 - **Design:** Refinamento visual da interface ('Pixel Perfect') emulando padrões de design com feedbacks visuais em todas as interações e estados de carregamento do React Query.
 
-## Pré-requisitos
+## Pré-requisitos e Instalação
 
-- PHP 8.1+
-- Composer
-- Node.js 18+
-- MySQL 8+
+- **PHP 8.1+**: [Download](https://windows.php.net/download/)
+- **Composer**: [Download](https://getcomposer.org/download/) (Gerenciador de dependências do PHP)
+- **Node.js 18+**: [Download](https://nodejs.org/) (Necessário para o ecossistema React/Vite)
+- **MySQL 8+**: Gerenciador de banco de dados (Pode ser utilizado via MySQL Installer, XAMPP, Laragon ou Docker).
+
+> **⚠️ Atenção: Configuração do PHP (Windows)**
+> Se você estiver configurando o PHP do zero no Windows, é necessário ativar a extensão de conexão com o banco de dados para evitar o **Erro 500** na API:
+> 1. Na pasta de instalação do PHP, renomeie o arquivo `php.ini-development` para `php.ini`.
+> 2. Abra o arquivo `php.ini` em um editor de texto.
+> 3. Procure a linha `;extension_dir = "ext"` e remova o `;` do início.
+> 4. Procure a linha `;extension=pdo_mysql` e remova o `;` do início.
+> 5. Certifique-se de adicionar o diretório do PHP nas Variáveis de Ambiente (`PATH`) do Windows.
 
 ## Configuração do Banco de Dados
 
@@ -58,14 +66,14 @@ Recebe os dados do usuário e do agendamento, validando duplicidade.
 
 1. Acesse a pasta `/backend`.
 2. Renomeie o arquivo `.env.example` para `.env` e configure suas credenciais de banco de dados.
-3. Rode `composer install` para instalar o roteador e dependências.
-4. Inicie o servidor embutido do PHP apontando para a pasta public:
+3. Abra o arquivo `.env` recém-criado e preencha com as credenciais (usuário e senha) do MySQL da sua máquina local.
+4. Rode `composer install` para instalar o roteador e dependências.
+5. Inicie o servidor embutido do PHP apontando para a pasta public:
    `php -S localhost:8000 -t public`
 
 ## Rodando o Frontend
 
 1. Acesse a pasta `/frontend`.
-2. Crie um arquivo `.env` na raiz do frontend com a URL da API:
-   `VITE_API_URL=http://localhost:8000/api`
+2. Renomeie o arquivo `.env.example` para `.env` e configure suas credenciais de banco de dados.
 3. Rode `npm install` (ou `yarn install`).
 4. Rode `npm run dev` (ou `yarn dev`) para iniciar o servidor de desenvolvimento.
