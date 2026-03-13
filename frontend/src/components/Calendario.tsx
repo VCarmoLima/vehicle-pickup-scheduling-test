@@ -125,10 +125,9 @@ export default function Calendario({ onNext }: Props) {
                 </IconButton>
             </Box>
 
-            <Box sx={{ width: '100%', minHeight: 60, display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 1.5 }}>
-                {!dataSelecionada && (
-                    <Typography color="text.secondary">Selecione uma data acima para ver os horários.</Typography>
-                )}
+            <Box sx={{ width: '100%', maxWidth: 500, mx: 'auto', minHeight: 60, display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 1.5 }}>                {!dataSelecionada && (
+                <Typography color="text.secondary">Selecione uma data acima para ver os horários.</Typography>
+            )}
                 {isLoading && <CircularProgress size={24} />}
                 {isError && <Alert severity="error">Erro ao buscar horários.</Alert>}
 
