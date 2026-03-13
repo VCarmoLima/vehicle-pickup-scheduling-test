@@ -16,6 +16,8 @@ O projeto foi construído utilizando um monorepo, separando claramente as respon
 - **Wizard Interativo (SPA):** Navegação fluida em três etapas (Calendário -> Formulário -> Sucesso) sem recarregar a página.
 - **Defesa em Profundidade (Validação):** Validação de E-mail via Regex e máscara de Telefone dinâmica (fixo/celular) em tempo real.
 - **Regras de Negócio na UI:** Bloqueio de datas retroativas, finais de semana e limite de agendamento de 30 dias diretamente no calendário visual.
+- **Calendário Horizontal Customizado:** Paginação fluida de dias úteis com navegação por setas, garantindo uma experiência otimizada sem o uso de "pop-ups" nativos.
+- **Design:** Refinamento visual da interface ('Pixel Perfect') emulando padrões de design com feedbacks visuais em todas as interações e estados de carregamento do React Query.
 
 ## Pré-requisitos
 
