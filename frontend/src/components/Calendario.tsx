@@ -47,10 +47,21 @@ export default function Calendario({ onNext }: Props) {
                 else if (Array.isArray(data)) listaBruta = data;
                 else if (typeof data === 'object') listaBruta = Object.values(data);
 
-                return listaBruta
+                let apenasHorarios = listaBruta
                     .flat()
                     .filter((item) => typeof item === 'string' && item.includes(':'))
-                    .map((hora) => hora.substring(0, 5));
+                    .map((hora) => hora.substring(0, 5))
+                    .sort();
+
+                const agora = dayjs();
+                const hoje = agora.format('YYYY-MM-DD');
+
+                if (dataFormatada === hoje) {
+                    const horaAtual = agora.format('HH:mm');
+                    apenasHorarios = apenasHorarios.filter(hora => hora > horaAtual);
+                }
+
+                return apenasHorarios;
             } catch (error) {
                 console.error(error);
                 return [];
