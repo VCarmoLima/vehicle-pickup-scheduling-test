@@ -1,23 +1,64 @@
 import { useState } from 'react';
-import { Box, Typography, Button } from '@mui/material';
-import { Grid } from '@mui/material';
+import { Box, Typography, Grid, Button, CircularProgress, Alert } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/pt-br';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '../services/api';
 
 dayjs.locale('pt-br');
 
 interface Props {
-    onNext: () => void;
+    onNext: (data: string, hora: string) => void;
 }
 
 export default function Calendario({ onNext }: Props) {
     const [horaSelecionada, setHoraSelecionada] = useState<string | null>(null);
     const [dataRetirada, setDataRetirada] = useState<Dayjs | null>(null);
 
-    const mockHorarios = ['09:00', '10:00', '11:00', '14:00', '15:00'];
+    const dataFormatada = dataRetirada ? dataRetirada.format('YYYY-MM-DD') : '';
+
+    const { data: horariosDisponiveis, isLoading, isError } = useQuery<string[]>({
+        queryKey: ['disponibilidade', dataFormatada],
+        queryFn: async () => {
+            try {
+                const response = await api.get(`/disponibilidade?data=${dataFormatada}`);
+                const data = response.data;
+
+                if (!data) return [];
+
+                let listaBruta: any[] = [];
+
+                if (data.horarios && Array.isArray(data.horarios)) {
+                    listaBruta = data.horarios;
+                }
+                else if (Array.isArray(data)) {
+                    listaBruta = data;
+                }
+                else if (typeof data === 'object') {
+                    listaBruta = Object.values(data);
+                }
+                const apenasHorarios = listaBruta
+                    .flat()
+                    .filter((item) => typeof item === 'string' && item.includes(':'))
+                    .map((hora) => hora.substring(0, 5));
+
+                return apenasHorarios;
+
+            } catch (error) {
+                console.error("Erro na API de disponibilidade:", error);
+                return [];
+            }
+        },
+        enabled: !!dataFormatada,
+    });
+
+    const handleDateChange = (newValue: Dayjs | null) => {
+        setDataRetirada(newValue);
+        setHoraSelecionada(null);
+    };
 
     return (
         <Box height="100%" display="flex" flexDirection="column">
@@ -34,7 +75,7 @@ export default function Calendario({ onNext }: Props) {
                         <DatePicker
                             label="Data da Retirada"
                             value={dataRetirada}
-                            onChange={(newValue) => setDataRetirada(newValue)}
+                            onChange={handleDateChange}
                             format="DD/MM/YYYY"
                             disablePast
                             maxDate={dayjs().add(30, 'day')}
@@ -48,8 +89,15 @@ export default function Calendario({ onNext }: Props) {
                     Horários Disponíveis:
                 </Typography>
 
+                {isLoading && <CircularProgress size={24} sx={{ my: 2 }} />}
+                {isError && <Alert severity="error">Erro ao buscar horários.</Alert>}
+
+                {horariosDisponiveis && horariosDisponiveis.length === 0 && (
+                    <Alert severity="warning">Não há horários disponíveis para esta data.</Alert>
+                )}
+
                 <Grid container spacing={2} mb={4}>
-                    {mockHorarios.map((hora) => (
+                    {Array.isArray(horariosDisponiveis) && horariosDisponiveis.map((hora) => (
                         <Grid size={{ xs: 4, sm: 3 }} key={hora}>
                             <Button
                                 variant={horaSelecionada === hora ? 'contained' : 'outlined'}
@@ -70,7 +118,7 @@ export default function Calendario({ onNext }: Props) {
                     variant="contained"
                     color="primary"
                     size="large"
-                    onClick={onNext}
+                    onClick={() => onNext(dataFormatada, horaSelecionada!)}
                     disabled={!horaSelecionada || !dataRetirada}
                 >
                     Avançar para Dados
